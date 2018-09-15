@@ -59,6 +59,12 @@ Note: “change the collection-data” means to replace the collection with new 
 
 #### Note: If you don’t have id (unique-key) for each data-item in your collection, you can always trackBy index (second argument passed to trackByFn). If you use a field to track by that is not unique across items in your collection, angular will throw an error
 
+
+## Try it out yourself
+
+<iframe height='265' scrolling='no' title='angular-ngfor-tracking' src='//codepen.io/simars/embed/KBGZVw/?height=265&theme-id=0&default-tab=js,result&embed-version=2' frameborder='no' allowtransparency='true' allowfullscreen='true' style='width: 100%;'>See the Pen <a href='https://codepen.io/simars/pen/KBGZVw/'>angular-ngfor-tracking</a> by Simar Paul Singh (<a href='https://codepen.io/simars'>@simars</a>) on <a href='https://codepen.io'>CodePen</a>.
+</iframe>
+
 ### Why is trackBy so important for Angular?
 
 Angular by default tracks items in a collection by object reference. When we replace the collection with new collection which is not keeping the same objects by reference, Angular can’t keep track of items in the collection even if the objects inside the new collection are same by values, but just clone of previous ones.

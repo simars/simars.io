@@ -37,16 +37,29 @@ progress {
 template {
   display: none;
 }
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
 a {
-  background-color: transparent;
-  -webkit-text-decoration-skip: objects;
-  color: #333;
+  border: none;
+  background: transparent url(./assets/images/link.svg) center left no-repeat;
+  background-size: .7em;
+  color: black;
+  padding-left: 1em;
+  border-radius: 2px;
   text-decoration: none;
 }
-a:active,
-a:hover {
+
+a:hover, a:focus {
+  color: black;
   outline-width: 0;
+  text-decoration: underline;
 }
+
 abbr[title] {
   border-bottom: none;
   text-decoration: underline;

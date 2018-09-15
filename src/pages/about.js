@@ -4,15 +4,15 @@ const AboutPage = () => (
   <div>
     <h1>About Me</h1>
 
-    <div>
-      [ <a href='https://www.linkedin.com/in/simar-singh-4930544/' target='_blank'>Linked In</a> |
-      | <a href='https://github.com/simars' target='_blank'>GitHub</a> |
-      | <a href='https://medium.com/simars' target='_blank'>Medium</a> |
-      | <a href='https://codepen.io/simars' target='_blank'>CodePen</a> |
-      | <a href='https://stackblitz.com/@simars' target='_blank'>StackBlitz</a> ]
-      <p>My Name is <em>Simar Paul Singh</em>. I have been professionally developing software since 2004.</p>
-
+    <div className="row">
+      <a href='https://www.linkedin.com/in/simar-singh-4930544/' target='_blank'>Linked In</a>
+      <a href='https://github.com/simars' target='_blank'>GitHub</a>
+      <a href='https://medium.com/simars' target='_blank'>Medium</a>
+      <a href='https://codepen.io/simars' target='_blank'>CodePen</a>
+      <a href='https://stackblitz.com/@simars' target='_blank'>StackBlitz</a>
     </div>
+
+    <p>My Name is <em>Simar Paul Singh</em>. I have been professionally developing software since 2004.</p>
 
     <h2>Programming Languages</h2>
     <p>
