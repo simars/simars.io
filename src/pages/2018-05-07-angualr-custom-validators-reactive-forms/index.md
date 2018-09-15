@@ -13,26 +13,28 @@ This makes adding controls dynamically with `FormArray`, reacting to events with
 
 However, there are aspects to form handling, in particular field validation and respective error messages that are more convenient in templates.
 
-For example, if a field _(email)_ is required only when _field (phone)_ is not filled in, *`ngIf` can simply remove or disable the unrequited _field (email)_ from the DOM, and put it back as a required field based on the _field (phone)_ value.
+For example, if a field _(email)_ is required only when _field (phone)_ is not filled in, *`ngIf` can simply remove or `attr.disabled` can disable the unrequited _field (email)_ from the DOM, and put it back as a required field based on the _field (phone)_ value.
 
-<pre name="d2c5" id="d2c5" class="graf graf--pre graf-after--p"><form #ngForm="f" (ngSubmit)="f.valid && onSubmit(f)" novalidate>  
- <label>   
-    Phone <input name="phone" #ngModel="phone"   pattern="[0-9]{9}">  
- </label>  
- <label> `*ngIf="phone.errors.pattern">   
-   Phone Number should be digits  
- </label>`</pre>
+<pre>
 
-<pre name="2b32" id="2b32" class="graf graf--pre graf-after--pre"><label>   
-   Email <input name="email" #ngModel="email">  
- </label>  
- <label> `*ngIf="`phone?.value?.length || email.value?.length`">   
-   Email is required if phone number is not given  
- </label>`  
- <button type="submit'  
-  [disabled]= "!f.valid || (!phone.value?.length && !email.value?.length)">Submit</button></pre>
+&lt;form #ngForm=&quot;f&quot; (ngSubmit)=&quot;f.valid &amp;&amp; onSubmit(f)&quot; novalidate&gt;
+ &lt;label&gt;
+    Phone &lt;input name=&quot;phone&quot; #ngModel=&quot;phone&quot;   pattern=&quot;[0-9]{9}&quot;&gt;
+ &lt;/label&gt;
+ &lt;label&gt; `*ngIf=&quot;phone.errors.pattern&quot;&gt;
+   Phone Number should be digits
+ &lt;/label&gt;`&lt;/pre&gt;
+ &lt;label&gt;
+   Email &lt;input name=&quot;email&quot; #ngModel=&quot;email&quot;&gt;
+ &lt;/label&gt;
+ &lt;label&gt; `*ngIf=&quot;`phone?.value?.length || email.value?.length`&quot;&gt;
+   Email is required if phone number is not given
+ &lt;/label&gt;`
+ &lt;button type=&quot;submit'
+  [disabled]=&quot;!f.valid || (!phone.value?.length &amp;&amp; !email.value?.length)&quot;&gt;Submit&lt;/button&gt;&lt;/pre&gt;
+&lt;/form&gt;
 
-<pre name="8ce0" id="8ce0" class="graf graf--pre graf-after--pre"></form></pre>
+</pre>
 
 In reactive form setup, having `*ngIf` ain’t going to do any good. The form controls in form group, controlling form’s fields are decoupled from template DOM by design.
 
@@ -64,7 +66,8 @@ If Both fields are required, there isn’t any relationship, simply both are Val
 
 This is how we can build a reusable Custom validates for each of these cases.
 
-<pre name="a34e" id="a34e" class="graf graf--pre graf-after--p">class CustomValidators {  
+<pre>
+class CustomValidators {
 
   static requiredWhen(requiredControlName, controlToCheckName) {  
     return (control: AbstractControl) => {  
@@ -78,9 +81,9 @@ This is how we can build a reusable Custom validates for each of these cases.
       setErrors({required: errorValue}, required);  
       return {[errorValue]: true};  
     };  
-  }</pre>
+  }
 
-<pre name="20ef" id="20ef" class="graf graf--pre graf-after--pre">static requiredEither(requiredControlName, controlToCheckName) {  
+  static requiredEither(requiredControlName, controlToCheckName) {
     return (control) => {  
       const required = control.get(requiredControlName);  
       const toCheck = control.get(controlToCheckName);  
@@ -94,9 +97,9 @@ This is how we can build a reusable Custom validates for each of these cases.
       setErrors({required: errorValue}, toCheck);  
       return {[errorValue]: true};  
     };  
-  }</pre>
+  }
 
-<pre name="5e9f" id="5e9f" class="graf graf--pre graf-after--pre">static requiredWhenNot(requiredControlName, controlToCheckName) {  
+  static requiredWhenNot(requiredControlName, controlToCheckName) {
     return (control) => {  
       const required = control.get(requiredControlName);  
       const toCheck = control.get(controlToCheckName);  
@@ -108,32 +111,35 @@ This is how we can build a reusable Custom validates for each of these cases.
       setErrors({required: errorValue}, required);  
       return  {[errorValue]: true};  
     };  
-  }</pre>
+  }
 
-<pre name="6a83" id="6a83" class="graf graf--pre graf-after--pre">}</pre>
+}
 
-<pre name="8f05" id="8f05" class="graf graf--pre graf-after--pre">function setErrors(error: {[key: string]: any }, control: AbstractControl) {  
+function setErrors(error: {[key: string]: any }, control: AbstractControl) {
   control.setErrors({...control.errors, ...error});  
-}</pre>
+}
 
-<pre name="54a1" id="54a1" class="graf graf--pre graf-after--pre">function  removeErrors(keys: string[], control: AbstractControl) {  
+function  removeErrors(keys: string[], control: AbstractControl) {
   const remainingErrors = keys.reduce((errors, key) => {  
     delete  errors[key];  
     return errors;  
   }, {...control.errors});  
   control.setErrors(Object.keys(remainingErrors).length > 0 ? remainingErrors : null);  
-}</pre>
+}
+</pre>
 
 Use them declarively in your your FromBuilder group definations.
 
-<pre name="abff" id="abff" class="graf graf--pre graf-after--p">class AppComponent implements OnInit  {</pre>
+<pre>
 
-<pre name="040f" id="040f" class="graf graf--pre graf-after--pre">registerForm: FormGroup;  
-    submitted = false;  
+ class AppComponent implements OnInit  {
 
-  constructor( [@Inject](http://twitter.com/Inject "Twitter profile for @Inject")(FormBuilder) private formBuilder: FormBuilder) {}</pre>
+  registerForm: FormGroup;
+  submitted = false;
 
-<pre name="dbfe" id="dbfe" class="graf graf--pre graf-after--pre">ngOnInit() {  
+  constructor(@Inject() private formBuilder: FormBuilder) {}
+
+  ngOnInit() {
         this.registerForm = this.formBuilder.group({  
             firstName: ['', Validators.required],  
             phone: ['', [Validators.pattern('[0-9]*')]],  
@@ -158,39 +164,42 @@ Use them declarively in your your FromBuilder group definations.
             return;  
         }  
         alert(`Submitted -> ${JSON.stringify(this.registerForm.value)}`);  
-    }</pre>
-
-<pre name="2459" id="2459" class="graf graf--pre graf-after--pre">}</pre>
+    }
+  }
+</pre>
 
 Template just reacts to validation control
 
-<pre name="4ad8" id="4ad8" class="graf graf--pre graf-after--p"><form [formGroup]="registerForm" (ngSubmit)="onSubmit()">  
- <label>   
-    Phone <input formControlName="phone">  
- </label>  
- <div *ngIf="f.phone.errors" class="invalid-feedback">  
-    <div *ngIf="f.phone.errors.required">  
-     Phone number is required if email is not given.</div>  
-     <div *ngIf="f.phone.errors.pattern">  
-     Phone number must match pattern digits</div>  
- </div></pre>
+<pre>
+&lt;form [formGroup]="registerForm" (ngSubmit)="onSubmit()"&gt
+ &lt;label&gt;
+    Phone &lt;input formControlName=&quot;phone&quot;&gt;
+ &lt;/label&gt;
+ &lt;div *ngIf=&quot;f.phone.errors&quot; class=&quot;invalid-feedback&quot;&gt;
+    &lt;div *ngIf=&quot;f.phone.errors.required&quot;&gt;
+     Phone number is required if email is not given.&lt;/div&gt;
+     &lt;div *ngIf=&quot;f.phone.errors.pattern&quot;&gt;
+     Phone number must match pattern digits&lt;/div&gt;
+ &lt;/div&gt;
+ &lt;label&gt;
+   Email &lt;input formControlName=&quot;email&quot;&gt;
+ &lt;/label&gt;
+ &lt;div *ngIf=&quot;f.email.errors&quot;&gt;
+    &lt;div *ngIf=&quot;f.email.errors.required&quot;&gt;
+    Email is required ({{f.email.errors.required}}).
+    &lt;/div&gt;
+    &lt;div *ngIf=&quot;f.email.errors.email&quot;&gt;
+    Email must be a valid email address
+    &lt;/div&gt;
+ &lt;/div&gt;
 
-<pre name="4f4c" id="4f4c" class="graf graf--pre graf-after--pre"><label>   
-   Email <input formControlName="email">  
- </label>  
- <div *ngIf="f.email.errors">  
-    <div *ngIf="f.email.errors.required">  
-    Email is required ({{f.email.errors.required}}).  
-    </div>  
-    <div *ngIf="f.email.errors.email">  
-    Email must be a valid email address  
-    </div>                          
-</div></pre>
+ &lt;button [disabled]=&quot;registerForm.invalid&quot; type=&quot;submit&quot;&gt;
+ Register
+ &lt;/button&gt;
+&lt;form&gt;
+</pre>
 
-<pre name="6adf" id="6adf" class="graf graf--pre graf-after--pre"><button [disabled]="registerForm.invalid" type="submit">  
- Register  
-</button></pre>
+## Try it out on [CodePen](https://codepen.io/simars/pen/ZMYxrm)
 
-<pre name="73df" id="73df" class="graf graf--pre graf-after--pre"></form></pre>
-
-Checkout full working code at [https://codepen.io/simars/pen/ZMYxrm](https://codepen.io/simars/pen/ZMYxrm)
+<iframe height='720' scrolling='no' title='angular-reactive-from-requiredWhen' src='//codepen.io/simars/embed/ZMYxrm/?height=265&theme-id=0&default-tab=js,result&embed-version=2' frameborder='no' allowtransparency='true' allowfullscreen='true' style='width: 100%;'>See the Pen <a href='https://codepen.io/simars/pen/ZMYxrm/'>angular-reactive-from-requiredWhen</a> by Simar Paul Singh (<a href='https://codepen.io/simars'>@simars</a>) on <a href='https://codepen.io'>CodePen</a>.
+</iframe>

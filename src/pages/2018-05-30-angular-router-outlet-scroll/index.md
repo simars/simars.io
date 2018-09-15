@@ -17,20 +17,19 @@ This means we could store the state of scrolls before a `router-outlet` activate
 
 Let’s solve this with a directive that targets all `router-outlet`
 
-<pre name="c618" id="c618" class="graf graf--pre graf-after--p">import {Attribute, Directive, ElementRef, Inject, InjectionToken, OnDestroy, OnInit, Optional} from '[@angular/core](http://twitter.com/angular/core "Twitter profile for @angular/core")';  
-import {Event, NavigationEnd, Router} from '[@angular/router](http://twitter.com/angular/router "Twitter profile for @angular/router")';  
-import {Subscription} from 'rxjs/Subscription';  
-import {distinctUntilChanged, filter} from 'rxjs/operators';</pre>
+<pre>
+ import {Attribute, Directive, ElementRef, Inject, InjectionToken, OnDestroy, OnInit, Optional} from '[@angular/core](http://twitter.com/angular/core "Twitter profile for @angular/core")';
+ import {Event, NavigationEnd, Router} from '[@angular/router](http://twitter.com/angular/router "Twitter profile for @angular/router")';
+ import {Subscription} from 'rxjs/Subscription';
+ import {distinctUntilChanged, filter} from 'rxjs/operators';
+ @Directive()({
+   selector: 'router-outlet'
+ })
+ export class RouterOutletDirective implements OnInit, OnDestroy {
 
-<pre name="1c75" id="1c75" class="graf graf--pre graf-after--pre">[@Directive](http://twitter.com/Directive "Twitter profile for @Directive")({  
-  selector: 'router-outlet'  
-})  
-export class RouterOutletDirective implements OnInit, OnDestroy {</pre>
+  private routerEventsSubscription: Subscription;
+  private currentXY: WindowXY;
 
-<pre name="4cf4" id="4cf4" class="graf graf--pre graf-after--pre">private routerEventsSubscription: Subscription;  
-  private currentXY: WindowXY;</pre>
-
-<pre name="715b" id="715b" class="graf graf--pre graf-after--pre">// I initialize the router-outlet directive.  
   constructor(  
     private elementRef: ElementRef,  
     private router: Router  
@@ -38,21 +37,19 @@ export class RouterOutletDirective implements OnInit, OnDestroy {</pre>
     this.elementRef = elementRef;  
     this.router = router;  
     this.routerEventsSubscription = null;  
-  }</pre>
+  }
 
-<pre name="a4b0" id="a4b0" class="graf graf--pre graf-after--pre">public ngOnDestroy(): void {  
+  public ngOnDestroy(): void {
     if (this.routerEventsSubscription) {  
       this.routerEventsSubscription.unsubscribe();  
     }  
     this.windowCoordinates = this.currentXY;  
-  }</pre>
+  }
 
-<pre name="b058" id="b058" class="graf graf--pre graf-after--pre">public ngOnInit(): void {  
-
+  public ngOnInit(): void {
     this.currentXY = this.windowCoordinates;  
-    this.windowScroll = [0, 0] as WindowXY; // reset window scroll</pre>
-
-<pre name="55cb" id="55cb" class="graf graf--pre graf-after--pre">this.routerEventsSubscription = this.router.events.pipe(  
+    this.windowScroll = [0, 0] as WindowXY; // reset window scroll
+    this.routerEventsSubscription = this.router.events.pipe(
       filter((event) => event instanceof NavigationEnd),  
       distinctUntilChanged((prev: NavigationEnd, next: NavigationEnd) => next && next.url === prev.url)  
     )  
@@ -62,17 +59,17 @@ export class RouterOutletDirective implements OnInit, OnDestroy {</pre>
           node.scrollTop = 0;  
         }  
       );  
-  }</pre>
+  }
 
-<pre name="45db" id="45db" class="graf graf--pre graf-after--pre">private get windowCoordinates(): WindowXY {  
+  private get windowCoordinates(): WindowXY {
     return [window.scrollX, window.scrollY] as WindowXY;  
-  }</pre>
+  }
 
-<pre name="1ea2" id="1ea2" class="graf graf--pre graf-after--pre">private set windowCoordinates(xy: WindowXY): WindowXY {  
+  private set windowCoordinates(xy: WindowXY): WindowXY {
     window.scrollTo(xy[0] || 0, xy[1] || 0);  
-  }</pre>
-
-<pre name="dc59" id="dc59" class="graf graf--pre graf-after--pre">}</pre>
+  }
+ }
+</pre>
 
 Notice, every time the route changes, the directive will grab the parent element and set `scrollTop` to `0` so if the component filling in the outlet has a content overflow with scroll, the scroll reset to top on every route change. (Assuming scroll is from parent-element to `router-outlet` marked `overflow: scroll` ).
 

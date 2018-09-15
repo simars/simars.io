@@ -15,7 +15,8 @@ author: "Simar Paul Singh"
 
 For source click on [**[GitHub]**](https://github.com/simars/ngx-mix-libraries/blob/master/projects/ngx-mix/src/lib/pipe/apply) & To Tryout click on **[**[**CodePen**](https://codepen.io/simars/pen/wxRpjN/)**]**
 
-<pre name="991f" id="991f" class="graf graf--pre graf-after--p">import { Pipe, PipeTransform } from '@angular/core';  
+<pre>
+import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({  
   name: 'applyPure',  
@@ -38,23 +39,26 @@ export class ApplyPipe implements PipeTransform {
     return fn(value);  
   }  
 
-}</pre>
+}
+</pre>
 
 Write your functions in components, and pass the function itself as pipe value-arg to be applied
 
-<pre name="3e4b" id="3e4b" class="graf graf--pre graf-after--p">[@Component](http://twitter.com/Component "Twitter profile for @Component")({  
+<pre>
+@Component()({
   selector: 'my-app',  
-  template: `<p>SUM of {{fib | json}} = {{fib | apply: sum}}</p>`  
+  template: `&lt;p&gt;SUM of {{fib | json}} = {{fib | apply: sum}}&lt;/p&gt;`
 })  
-class AppComponent  {</pre>
+class AppComponent  {
 
-<pre name="ab3e" id="ab3e" class="graf graf--pre graf-after--pre">fib = [1, 2, 3, 5, 8];</pre>
+fib = [1, 2, 3, 5, 8];
 
-<pre name="7983" id="7983" class="graf graf--pre graf-after--pre">public sum(collection: [number]): number {  
-    return collection.reduce((first, second) => first + second);  
+public sum(collection: [number]): number {
+    return collection.reduce((first, second) => first + second);
   }  
 
-}</pre>
+}
+</pre>
 
 ### Why do we need two kinds (apply & applyPure)?
 
@@ -73,8 +77,7 @@ class AppComponent  {</pre>
 
 (1) is obvious but (2) is something easy to trip over. Let us see it with examples
 
-</div>
+## Try it out on **[**[**CodePen**](https://codepen.io/simars/pen/wxRpjN/)**]**
 
-</div>
-
-</section>
+<iframe height='844' scrolling='no' title='angular-apply-pipes' src='//codepen.io/simars/embed/wxRpjN/?height=265&theme-id=0&default-tab=js,result&embed-version=2' frameborder='no' allowtransparency='true' allowfullscreen='true' style='width: 100%;'>See the Pen <a href='https://codepen.io/simars/pen/wxRpjN/'>angular-apply-pipes</a> by Simar Paul Singh (<a href='https://codepen.io/simars'>@simars</a>) on <a href='https://codepen.io'>CodePen</a>.
+</iframe>
