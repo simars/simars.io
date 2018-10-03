@@ -63,7 +63,7 @@ Note: “change the collection-data” means to replace the collection with new 
 
 ## Try it out yourself
 
-<iframe height='265' scrolling='no' title='angular-ngfor-tracking' src='//codepen.io/simars/embed/KBGZVw/?height=265&theme-id=0&default-tab=js,result&embed-version=2' frameborder='no' allowtransparency='true' allowfullscreen='true' style='width: 100%;'>See the Pen <a href='https://codepen.io/simars/pen/KBGZVw/'>angular-ngfor-tracking</a> by Simar Paul Singh (<a href='https://codepen.io/simars'>@simars</a>) on <a href='https://codepen.io'>CodePen</a>.
+<iframe height='640' scrolling='no' title='angular-ngfor-tracking' src='//codepen.io/simars/embed/KBGZVw/?height=265&theme-id=0&default-tab=js,result&embed-version=2' frameborder='no' allowtransparency='true' allowfullscreen='true' style='width: 100%;'>See the Pen <a href='https://codepen.io/simars/pen/KBGZVw/'>angular-ngfor-tracking</a> by Simar Paul Singh (<a href='https://codepen.io/simars'>@simars</a>) on <a href='https://codepen.io'>CodePen</a>.
 </iframe>
 
 ### Why is trackBy so important for Angular?
