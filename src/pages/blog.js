@@ -2,9 +2,12 @@ import React from 'react'
 import Link from 'gatsby-link'
 
 const BlogPage = ({ data }) => (
-  <div>
-    <h1>Programming, Architecture, Concepts & Trends</h1>
-    <p>Also on <a href='https://medium.com/simars' target='_blank'>[Medium]</a></p>
+  <section>
+
+    <div className="row">
+      <h1>Programming, Architecture, Concepts & Trends</h1>
+      <p>Also on <a href='https://medium.com/simars' target='_blank'>[Medium]</a></p>
+    </div>
 
     {data.allMarkdownRemark.edges.map(post => (
       <div key={post.node.id}>
@@ -19,7 +22,7 @@ const BlogPage = ({ data }) => (
         <hr />
       </div>
     ))}
-  </div>
+  </section>
 )
 
 export const pageQuery = graphql`
