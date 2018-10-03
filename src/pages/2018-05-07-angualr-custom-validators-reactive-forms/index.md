@@ -3,6 +3,7 @@ path: "/custom-transitive-validators-in-reactive-forms-angular"
 date: "2018-05-07"
 title: "Build {Cross-field / Transitive Validators} for {Reactive Forms} | Angular"
 author: "Simar Paul Singh"
+published: true
 ---
 
 * * *

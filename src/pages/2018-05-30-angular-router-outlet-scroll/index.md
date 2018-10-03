@@ -3,6 +3,7 @@ path: "/manage-scrolls-on-router-outlets-angular"
 date: "2018-05-30"
 title: "Manage Scrolls on router-outlets | Angular"
 author: "Simar Singh"
+published: true
 ---
 
 * * *

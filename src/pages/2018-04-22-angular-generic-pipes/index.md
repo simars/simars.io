@@ -3,6 +3,7 @@ path: "/create-generic-angular-pipes-apply-and-applypure"
 date: "2018-04-22"
 title: "Create Generic Angular Pipes | apply and applyPure"
 author: "Simar Paul Singh"
+published: true
 ---
 
 

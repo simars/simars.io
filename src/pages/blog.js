@@ -25,9 +25,11 @@ const BlogPage = ({ data }) => (
 export const pageQuery = graphql`
   query BlogIndexQuery {
     allMarkdownRemark(
-     sort: {
-      fields: [frontmatter___date] 
-      order: DESC}
+      sort: { 
+        fields: [frontmatter___date], order: DESC 
+       }
+      filter: { 
+        frontmatter: { published: { eq: true } } } 
     ) {
       edges {
         node {

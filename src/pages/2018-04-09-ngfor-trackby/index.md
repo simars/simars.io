@@ -3,6 +3,7 @@ path: "/improve-ngfor-usability-and-performance-with-trackby"
 date: "2018-04-09"
 title: "Improve Angular’s *ngFor performance and usability with trackBy"
 author: "Simar Paul Singh"
+published: true
 ---
 
 
