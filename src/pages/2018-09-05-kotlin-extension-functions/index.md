@@ -36,7 +36,7 @@ See the implementation below. When _jsonNode.transform(fn)_ is called, it first 
     )
 
   fun JsonNode.transform(fn: MutableMap<String, Any>.() -> Unit): JsonNode =
-          toMap().also(fn).let **{** _mapper_.valueToTree(_it_) **}** fun JsonNode.toMap(): MutableMap<String, Any> =
+          toMap().also(fn).let { _mapper_.valueToTree(_it_) } fun JsonNode.toMap(): MutableMap<String, Any> =
     (_mapper_.readValue(StringReader(toString())) as MutableMap<String, Any>)
 
   @Test
@@ -45,9 +45,9 @@ See the implementation below. When _jsonNode.transform(fn)_ is called, it first 
     val jsonNode = jsonNode();
     assertEquals("Simar", jsonNode.get("name").textValue())
     assertEquals("Canada", jsonNode.get("country").textValue())
-    val newJsonNode: JsonNode = jsonNode.transfrorm(**{** set("name", "Paul")
+    val newJsonNode: JsonNode = jsonNode.transfrorm({ set("name", "Paul")
         remove("country")
-    **}**);
+    });
     assertEquals("Paul", newJsonNode.get("name").textValue())
     assertNull(newJsonNode.get("country"))
   }
