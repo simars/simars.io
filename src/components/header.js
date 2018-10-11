@@ -2,7 +2,7 @@ import React from 'react'
 import Link from 'gatsby-link'
 
 const Header = ({ siteTitle }) => (
-  <div
+  <div className="row"
     style={{
       background: '#333',
       marginBottom: '0',

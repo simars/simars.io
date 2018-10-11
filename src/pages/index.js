@@ -4,22 +4,25 @@ import BlogPage from "./blog";
 
 const IndexPage = ({data}) => (
   <div>
-    <h1 className="row">Welcome to my portal | Simars.io</h1>
+    <h2 className="row">Welcome to my portal | Simars.io</h2>
     <p>
-      My name is <em>Simar Paul Singh</em>. I am polyglot programmer, experienced software developer and architect.
+      My name is <strong><em>Simar Paul Singh</em></strong>. I am polyglot programmer, experienced software developer and architect.
     </p>
 
-    <h3 className='row'>
+    <h4 className='row'>
       <a href='https://www.linkedin.com/in/simar-singh-4930544/' target='_blank'>Linked In</a>
       <a href='https://github.com/simars' target='_blank'>GitHub</a>
       <a href='https://medium.com/simars' target='_blank'>Medium</a>
       <a href='https://codepen.io/simars' target='_blank'>CodePen</a>
       <a href='https://stackblitz.com/@simars' target='_blank'>StackBlitz</a>
-    </h3>
+    </h4>
     <hr/>
-    <h2 className='row'> Recent Posts </h2>
+    <div className='column'>
+      <strong>Complete Blog <Link to="/blog">[Here]</Link> </strong>
+    </div>
+
     <BlogPage data={data}/>
-    <h3 className="row">
+    <h3>
       <span>Complete Blog <Link to="/blog">[Here]</Link> or on <a href='https://medium.com/simars' target='_blank'>[Medium]</a></span>
     </h3>
 

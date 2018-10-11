@@ -4,9 +4,9 @@ import Link from 'gatsby-link'
 const BlogPage = ({ data }) => (
   <section>
 
-    <div className="row">
-      <h1>Programming, Architecture, Concepts & Trends</h1>
-      <p>Also on <a href='https://medium.com/simars' target='_blank'>[Medium]</a></p>
+    <div className="column">
+      <span>Also on <a href='https://medium.com/simars' target='_blank'>[Medium]</a></span>
+      <h2>Programming, Architecture, Concepts & Trends</h2>
     </div>
 
     {data.allMarkdownRemark.edges.map(post => (

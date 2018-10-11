@@ -2,15 +2,15 @@ import React from 'react'
 
 const AboutPage = () => (
   <div>
-    <h1>About Me</h1>
+    <h1 className="row">About Me</h1>
 
-    <div className="row">
+    <h4 className="row">
       <a href='https://www.linkedin.com/in/simar-singh-4930544/' target='_blank'>Linked In</a>
       <a href='https://github.com/simars' target='_blank'>GitHub</a>
       <a href='https://medium.com/simars' target='_blank'>Medium</a>
       <a href='https://codepen.io/simars' target='_blank'>CodePen</a>
       <a href='https://stackblitz.com/@simars' target='_blank'>StackBlitz</a>
-    </div>
+    </h4>
 
     <p>My Name is <em>Simar Paul Singh</em>. I have been professionally developing software since 2004.</p>
 
