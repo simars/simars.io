@@ -10,23 +10,23 @@ published: true
 
 Typical **Angular** application renders and interacts with set of **_Container_** *(Smart / Stateful)* components, containing one or more re-usable **_Presentation_** *(Dumb / Stateless)* components.
 
-**__Services__** contain *Business Logic*. **_Pipes_** and **_Store Selectors_** contain *Re-usable Transformers / Data Logic*. 
+**__Services__** contain *Business Logic*. **_Pipes_** and **_Store Selectors_** contain *Re-usable Transformers / Data Logic*.
 
-**__Model / State__**  should be in _Store_. *Ngrx* is commonly used for store and state management with _reducers_ and _effects_ handling state selection and mutations.
+**_Store_** pattern works well for managing _Model / State_. *Ngrx* is commonly is one such implementation for state management with _reducers_ and _effects_ handling state selection and mutations.
 
 **_Container_** _components_ are responsible for wiring up, _Services_, data to/from _Store_ pass in `@Input()` data to **_Presentation_** _components_ for rendering and process `@Output()` from handed / emitted event(s).
 
-_Services, Pipes , Store (Reducers & Selectors)_ are usually straight forward to _unit test_ as they don't involve any DOM _rendering_ or _event-handling_
+_Services, Pipes , Store (Reducers & Selectors)_ are usually straight forward to _unit test_ as they don't involve any DOM _rendering_ or _event-handling_.
 
-Unit Testing **_Container_** _Components_ must be done at 2 levels, **Shallow Test** and **Deep Test**, to test any direct rendering / event-handling done by container component, then its wiring to contained presentation components respectively.
+**Unit Testing** of **_Container_** _Components_ must be done at 2 levels, **Shallow Test** and **Deep Test**. First test any direct rendering / event-handling done by container component, then its wiring to contained presentation components respectively.
 
-Consider an example `<Details-Container/>` component is a container component, responsible for providing and / or managing state `details`, (ex. using ngrx store, state selectors and/or actions).
-It contains a presentation components `<Contact-Presentation/>`, which receive `contact` data as `@Input()` property for rendering, and _emits_ `(onAdd)` event when user clicks on a _Add to my Contacts_ `<button/>`.
+Consider an example `<Details-Container/>` is a _Container_ component, interacts with store to select and manage state slice `details`, (ex. using ngrx store, state selectors and/or actions).
+It contains a _Presentation_ component `<Contact-Presentation/>`, which receives `details.contact` data as `@Input() contact` property for rendering, and _emits_ `@Output() onAdd.emit(contact.id)` event when user clicks on a _Add to my Contacts_ `<button/>`.
 
 
 ```
 import { Component } from '@angular/core';
-import { select, Store } from '@ngrx/store';
+import { select, Store, Action } from '@ngrx/store';
 
 
 @Component({
@@ -55,7 +55,7 @@ export class DetailsContainerComponent {
     this.store.dispatch({ 
       type: 'add_my_contact', 
       payload: contactId  
-     } : ActionWithPayload<number>)
+     } : Action)
   }
 
 }
@@ -104,7 +104,6 @@ Avoid the the contained presentation components with `schemas: [NO_ERRORS_SCHEMA
 
 ```
 import { TestBed, async } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { DetailsContainerComponent } from './details.component';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { BehaviourSubject } from 'rxjs';
@@ -154,7 +153,7 @@ describe('DetailsContainerComponent', () => {
   }));
 
   it('should select details from store', async(() => {
-    expect(store.pipw).toHaveBeenCallWith(select(getContainerDetails));
+    expect(store.pipe).toHaveBeenCallWith(select(getContainerDetails));
     expect(comp.details$).subscribe((d)=> expect(d).toBe(details)); // without jasmine marbles
     expect(comp.details$).toBeObsevable('(a|)', {a: details}); // with jasmine marbles
   }));
@@ -188,13 +187,13 @@ describe('DetailsContainerComponent', () => {
 Our Objective in **Deep Test(s)** is to assert _Interactions of Container Component with presentation Components, store, and any services if any_.
 
 
-1. `<Container-Details\>` passes the correct `@Input() contact` = `details.location` to `<Location-Contact/>`
-2. `<Container-Details\>` can receive `(onAdd)` event from `<Presentation-Contact/>` & react by dispatching `add-my-contact` action to `Store`
+1. `<Container-Details\>` passes the correct `@Input() contact` = `details.location` to `<Contact-Presentation/>`
+2. `<Container-Details\>` can receive `(onAdd)` event from `<Contact-Presentation/>` & react by dispatching `add-my-contact` action to `Store`
 
 ```
 import { TestBed, async } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { DetailsContainerComponent } from './details.component';
+import { DetailsContainerComponent } from './contact.component';
 import { Store } from '@ngrx/store';
 import { BehaviourSubject } from 'rxjs';
 import { select, Store } from '@ngrx/store';
@@ -239,7 +238,9 @@ describe('DetailsContainerComponent', () => {
 
   it('should pass contact.details as inpiut to <Contact-Presentation/>', async(() => {
     fixture.detectChanges();
-    const contactComp = fixture.debugElement.query(By.css('Contact-Presentation'));
+    const de = fixture.debugElement;
+    const contactEl = de.query(By.css('Contact-Presentation'));
+    const contactComp = contactEl.componentInstance as ContactPresetationComponent;
     expect(contactComp).toBeTruhty();
     expect(contactComp.contact).toEqual(details.contact);
     const contact = { firstName: 'Paul', email: 'paul@paul.com' }
@@ -250,7 +251,9 @@ describe('DetailsContainerComponent', () => {
 
   it('should listen to onAdd() event from <Contact-Presentation/>', async(() => {
     fixture.detectChanges();
-    const contactComp = fixture.debugElement.query(By.css('Contact-Presentation'));
+    const de = fixture.debugElement;
+    const contactEl = de.query(By.css('Contact-Presentation'));
+    const contactComp = contactEl.componentInstance as ContactPresetationComponent;
     expect(contactComp).toBeTruhty();
     spyOn(comp,'addContact').and.callThrough();
     const contactId = 10;
@@ -259,7 +262,7 @@ describe('DetailsContainerComponent', () => {
     expect(store.dispatch).toHaveBeenCalledWith({
         type: 'add_my_contact',
         payload: 10
-      } : ActionWithPayload<number>);
+      } : Action);
   }));
 
 });
@@ -271,7 +274,7 @@ describe('DetailsContainerComponent', () => {
 
 We can always test the rendering and event handling of inner components in deep tests for container components.
 However, that is necessary if we are not writing any shallow tests for those inner components.
-Assuming we write shallow tests for all component, writing deep tests for container components to just test the interactions is reasonable.
+Assuming we write shallow tests for all component, unit tests for store reducers, selectors and effects, writing deep tests for container components to just test the interactions is reasonable.
 
 
 Let us consider we don't have a shallow test for `<Contact-Presentation>`, and we don't need writing one as it is not going to be used anywhere other than `<Details-Container>`
@@ -312,14 +315,14 @@ We could re-write the last two tests as follows.
 ```
 
 
-Its more _maintainable_ to test _DOM rendering and event handling_ of `<Contact-Presentation/>` its own spec and not have the same tests in the `<Details-Container/>`
+Its more _maintainable_ to test _DOM rendering and event handling_ of `<Contact-Presentation/>` in its own spec and not have the same tests in the `<Details-Container/>`
 
-**_Presentation_** _components_ are re-usable and may be used by many other components. It becomes a maintenance overhead when the same component for same cases gets tested in many different places.
+**_Presentation_** _components_ are re-usable and may be used by many other components. It is a maintenance overhead when the same component for same cases gets tested in many different places.
 
-If you are concerned about how the whole component tree's render, __E2E__ _(End to End Testing)_ tests are a better solution than complicating our deep tests for containers.
+If you are concerned about how the whole component tree renders, __E2E__ _(End to End Testing)_ tests are a better solution than complicating our deep tests for containers.
 
 Check out __[Protractor](https://github.com/angular/protractor)__ , a popular framework / tool for Angular _end to end testing_ __E2E__ .
 
-__Shallow__ and __Deep Tests__ fall under __unit testing__ which are much easier to write, run faster and are self-contained making them more maintainable than __E2E__ tests
+__Shallow__ and __Deep Tests__ fall under __Unit Testing__ which are much easier to write, run faster and are self-contained which makes them more maintainable than __E2E Tests__
 
-__E2E__ tests are great for high-level validation of the entire system. But they can't give you the comprehensive test coverage that you'd expect from __unit tests__.
+__E2E Tests__ are great for high-level validation of the entire system. But they can't give you the comprehensive test coverage that you would expect from __Unit Tests__.
