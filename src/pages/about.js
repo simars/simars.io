@@ -22,9 +22,9 @@ const AboutPage = () => (
 
     <h2>Frameworks</h2>
     <p>
-      Actively using <em>(Spring on Java / Kotlin / Scala), (Koa.js / Express on Node), (Angular / React on
-      Web). </em> I have keen interest in modern web front-end frameworks and technologies like web-components,
-      shadow-DOM etc.
+      Actively using <em>(Spring on Java / Kotlin / Scala), (Koa.js / Express on Node), (Angular / React).
+    </em> I have keen interest in modern web front-end frameworks and technologies like web-components,
+      shadow-DOM, web-assembly etc.
     </p>
 
     <h2>Platforms</h2>
@@ -40,12 +40,6 @@ const AboutPage = () => (
       I would love to contribute professionally in Machine Learning. Most of my ML experience has been DIY.
     </p>
 
-    <h2>Windows or Mac</h2>
-    <p>
-      I need bash, can't work with power-shell, but I am a Windows 10 user. Git-bash has long been a saviour.
-      Especially after Windows 10 pro came up with Linux subsystem, haven't found any motivation to switch.
-      Also, there are plenty of great windows laptops, many more power and some even slicker that Mac-Books
-    </p>
   </div>
 )
 

@@ -12,9 +12,9 @@ Typical **Angular** application renders and interacts with set of **_Container_*
 
 **__Services__** contain *Business Logic*. **_Pipes_** and **_Store Selectors_** contain *Re-usable Transformers / Data Logic*.
 
-**_Store_** pattern works well for managing _Model / State_. *Ngrx* is commonly is one such implementation for state management with _reducers_ and _effects_ handling state selection and mutations.
+**_Store_** pattern works well for managing _Model / State_. *Ngrx* is one such implementation for state management with _reducers_ and _effects_ handling state selection and mutations.
 
-**_Container_** _components_ are responsible for wiring up, _Services_, data to/from _Store_ pass in `@Input()` data to **_Presentation_** _components_ for rendering and process `@Output()` from handed / emitted event(s).
+**_Container_** _components_ are responsible for wiring up, _Services_, data to/from _Store_, pass in `@Input()` data to **_Presentation_** _components_ for rendering and process `@Output()` (event(s) emitted) from them.
 
 _Services, Pipes , Store (Reducers & Selectors)_ are usually straight forward to _unit test_ as they don't involve any DOM _rendering_ or _event-handling_.
 
@@ -98,7 +98,7 @@ The trick here is to configure `TestBed` with only `declarations: [DetailsContai
 Avoid the the contained presentation components with `schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA]`
 
 1. `<Details-Container/>` instantiates properly.
-2. `<Details-Container/>`, selects `details` data from store (it could be `ActivatedRoute` , some _service_, etc)
+2. `<Details-Container/>`, selects `details` data from store (it could be `ActivatedRoute` , some direct _service_, etc if you are not using Store / Ngrx)
 3. `<Details-Container/>` renders `details.title` and `details.description`, re-renders with changes on change detection
 
 
@@ -193,7 +193,7 @@ Our Objective in **Deep Test(s)** is to assert _Interactions of Container Compon
 ```
 import { TestBed, async } from '@angular/core/testing';
 import { DetailsContainerComponent } from './details.component';
-import { DetailsContainerComponent } from './contact.component';
+import { ContactPresetationComponent } from './contact.component';
 import { Store } from '@ngrx/store';
 import { BehaviourSubject } from 'rxjs';
 import { select, Store } from '@ngrx/store';
