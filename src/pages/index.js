@@ -17,9 +17,6 @@ const IndexPage = ({data}) => (
       <a href='https://stackblitz.com/@simars' target='_blank'>StackBlitz</a>
     </h4>
     <hr/>
-    <div className='column'>
-      <strong>Complete Blog <Link to="/blog">[Here]</Link> </strong>
-    </div>
 
     <BlogPage data={data}/>
     <h3>

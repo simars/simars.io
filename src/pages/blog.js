@@ -5,7 +5,7 @@ const BlogPage = ({ data }) => (
   <section>
 
     <div className="column">
-      <span>Also on <a href='https://medium.com/simars' target='_blank'>[Medium]</a></span>
+      <strong>Also on <a href='https://medium.com/simars' target='_blank'>[Medium]</a></strong>
       <h2>Programming, Architecture, Concepts & Trends</h2>
     </div>
 
