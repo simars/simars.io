@@ -8,20 +8,24 @@ published: true
 
 * * *
 
-Typical **Angular** application renders and interacts with set of **_Container_** *(Smart / Stateful)* components, containing one or more re-usable **_Presentation_** *(Dumb / Stateless)* components.
 
-**__Services__** contain *Business Logic*. **_Pipes_** and **_Store Selectors_** contain *Re-usable Transformers / Data Logic*.
+Typical **Angular** application renders and interacts with set of **_Container_** _(Smart / Stateful)_ components, containing one or more re-usable **_Presentation_** _(Dumb / Stateless)_ components.
 
-**_Store_** pattern works well for managing _Model / State_. *Ngrx* is one such implementation for state management with _reducers_ and _effects_ handling state selection and mutations.
+**Services** contain _Business Logic_. **_Pipes_** and **_Store Selectors_** contain _Re-usable Data Transformers / Functions_.
 
-**_Container_** _components_ are responsible for wiring up, _Services_, data to/from _Store_, pass in `@Input()` data to **_Presentation_** _components_ for rendering and process `@Output()` (event(s) emitted) from them.
+**_Store_** pattern works well for managing _State / Model_. **_Ngrx_** is one such implementation for state management with _reducers_ and _effects_ handling state mutations and _selectors_ handling retrieval.
 
-_Services, Pipes , Store (Reducers & Selectors)_ are usually straight forward to _unit test_ as they don't involve any DOM _rendering_ or _event-handling_.
+**_Container_** _components_ are responsible for wiring up, _Services_, data to/from _Store,_ pass in `@Input()` data to **_Presentation_** _components_ for rendering and process `@Output()` event(s) emitted by them by dispatching _actions_.
 
-**Unit Testing** of **_Container_** _Components_ must be done at 2 levels, **Shallow Test** and **Deep Test**. First test any direct rendering / event-handling done by container component, then its wiring to contained presentation components respectively.
+_Services, Pipes , Store (Reducers & Selectors)_ are usually straight forward to _unit test_ as they don’t involve any DOM _rendering_ or async _event-handling_ and mostly take pure functions approach for easy testability. (with the exception of _Effects_ and _Impure-Pipes_).
 
-Consider an example `<Details-Container/>` is a _Container_ component, interacts with store to select and manage state slice `details`, (ex. using ngrx store, state selectors and/or actions).
-It contains a _Presentation_ component `<Contact-Presentation/>`, which receives `details.contact` data as `@Input() contact` property for rendering, and _emits_ `@Output() onAdd.emit(contact.id)` event when user clicks on a _Add to my Contacts_ `<button/>`.
+If in tests, our _components_ are instantiated as simple class instance without _TestBed_, we wouldn’t have Zone to test its bindings to template. We cannot test DOM rendering and event-handling.
+
+Since a well designed component usually has all the _business / state manipulation & selection_ logic abstracted away in _services, store, store-reducers, store-selectors / pipes respectively_, traditional unit tests wouldn’t have much to test, as component’s main responsibility then is to serve its template.
+
+**Testing** of **_Container_** _Components_ must be done at 2 levels, **Shallow Test** and **Deep Test**. First test any direct _rendering / event-handling_ done by **_Container_** _component_, then its **_wiring_** to its **_Providers_** (ex store) and contained **_Presentation_** _components_ respectively.
+
+Consider an example `<Details-Container/>` is a _Container_ component, interacts with store to select and manage state slice `details`, (ex. using ngrx store, state selectors and/or actions). It contains a _Presentation_ component `<Contact-Presentation/>`, which receives `details.contact` data as `@Input() contact` property for rendering, and _emits_ `@Output() onAdd.emit(contact.id)` event when user clicks on a _Add to my Contacts_ `<button/>`.
 
 
 ```
@@ -319,10 +323,10 @@ Its more _maintainable_ to test _DOM rendering and event handling_ of `<Contact-
 
 **_Presentation_** _components_ are re-usable and may be used by many other components. It is a maintenance overhead when the same component for same cases gets tested in many different places.
 
-If you are concerned about how the whole component tree renders, __E2E__ _(End to End Testing)_ tests are a better solution than complicating our deep tests for containers.
+If you are concerned about how the whole component tree renders, **E2E** _(End to End Testing)_ tests are a better solution than complicating our deep tests for containers.
 
-Check out __[Protractor](https://github.com/angular/protractor)__ , a popular framework / tool for Angular _end to end testing_ __E2E__ .
+Check out [**Protractor**](https://github.com/angular/protractor) , a popular framework / tool for Angular _end to end testing_ **E2E** .
 
-__Shallow__ and __Deep Tests__ fall under __Unit Testing__ which are much easier to write, run faster and are self-contained which makes them more maintainable than __E2E Tests__
+**Shallow** and **Deep Tests** fall under **Unit Testing** which are much easier to write, run faster and are self-contained which makes them more maintainable than **E2E Tests**
 
-__E2E Tests__ are great for high-level validation of the entire system. But they can't give you the comprehensive test coverage that you would expect from __Unit Tests__.
+**E2E Tests** are great for high-level validation of the entire system. But they can’t give you the comprehensive test coverage that you would expect from **Unit Tests**.
