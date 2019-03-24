@@ -1,11 +1,10 @@
 ---
-path: "/es6-arrow-functions-when_not_to_use"
+path: "/es6-arrow-functions-when-not-to-use"
 date: "2019-03-05"
-title: "S6+ Arrow Functions (Lambdas) | When NOT to use"
+title: "ES6+ Arrow Functions [Lambdas] | When NOT to use"
 author: "Simar Paul Singh"
 published: true
 ---
-
 
 Arrow functions or Lambdas, were introduced in ES 6. Apart from its elegance in minimal syntax, most notable functional **difference is scoping of** `this` **inside an arrow function**
 
@@ -115,7 +114,7 @@ None of the above will work with arrow function `const print = () => { console.l
 
 These were contrived examples, but let’s think about some more real life examples. If we had to write our `reduce()` method similar to one that works on `arrays` , we again can’t define it as a lambda, because it needs to infer `this` from the invocation context, ie. the array on which it was invoked
 
-For this reason, `constructor` functions can never be defined as arrow functions, as `this` for a constructor function is created at the time of constructor invocation, not declaration
+For this reason, `constructor` functions can never be defined as arrow functions, as `this` for a constructor function can not be set at the time of its declaration. Every-time a constructor function is invoked with `new` keyword, a new object is created which then gets bound to that particular invocation.
 
 Also when when frameworks or systems accept a callback function(s) to be invoked later with dynamic context `this` , we can’t use arrow functions as again `this` may need to change with every invocation. This situation commonly arrises with DOM event handlers
 
@@ -134,6 +133,8 @@ button.addEventListener('click', () => {
 ```
 
 This is also the reason why in frameworks like **Angular 2+** and **Vue.js** expectthe template-component binding methods to be regular function / methods as `this` for their invocation is managed by the frameworks for the binding functions. (Angular uses Zone.js to manage async context for invocations of view-template binding functions)
+
+On the other hand, in **React**, when we want pass a component's method as an event-handler for example `<input onChange={this.handleOnchange} />` we should define `handleOnchanage = (event)=> {this.props.onInputChange(event.target.value);}` as an arrow function as for every invocation, we want this to be same instance of the component that produced the JSX for rendered DOM element.
 
 -------
 
