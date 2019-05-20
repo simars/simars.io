@@ -19,9 +19,9 @@ You can decipher most of what I have to discuss here from official docs for [hoo
 
 ### **Post-render lifecycle**
 
-**Post-render lifecycle** events, those equivalent to `componentDidMount`, `componentDidUpdate` and `componentDidUnmount` in class based component.
+**Post-render lifecycle** events, those equivalent to `componentDidMount`, `componentDidUpdate` and `componentWillUnmount` in class based component.
 
-**_We need to_ **`**_useEffect(…)_**`** _to handle these Post-render lifecycle events_** as we can’t write the logic tied to these lifecycle events inside the main component function as these should run after the component function returns JSX (react-node) to `react-dom` renderer.
+**_We need to_ **_`useEffect(…)`_** _to handle these Post-render lifecycle events_** as we can’t write the logic tied to these lifecycle events inside the main component function as these should run after the component function returns JSX (react-node) to `react-dom` renderer.
 
 This means, we have lot we can do with hooks. How?
 
@@ -53,7 +53,7 @@ export default props => {
     console.log("componentDidMount");
     document.addEventListener("mousemove", mouseMoveHandler);
     return () => {
-      console.log("componentDidUnmount");
+      console.log("componentWillUnmount");
       document.removeEventListener("mousemove", mouseMoveHandler);
     };
   }, []); // empty-array means don't watch for any updates
@@ -65,7 +65,7 @@ export default props => {
     [x, y]
   );
   useEffect(() => {
-    // if componentDidUpdate
+    // if componentDidUpdate or componentDidMount
     if (x === y) {
       setCross(x);
     }
