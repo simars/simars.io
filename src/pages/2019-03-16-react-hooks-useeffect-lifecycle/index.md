@@ -64,7 +64,7 @@ export default props => {
     },
     [x, y]
   );
-useEffect(() => {
+  useEffect(() => {
     // if componentDidUpdate or componentDidMount
     if (x === y) {
       setCross(x);
